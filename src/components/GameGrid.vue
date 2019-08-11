@@ -33,6 +33,9 @@ export default {
     };
   },
   computed: {
+    endOfRound() {
+      return this.chosenTiles.length === 2;
+    },
     roundIsWon() {
       return (
         this.chosenTiles.length === 2 &&
@@ -62,20 +65,19 @@ export default {
         this.foundPairs.includes(index)
       )
         return;
-      console.log("choosing");
       this.chosenTiles.push(index);
       this.freeze = true;
       setTimeout(() => {
-        if (this.chosenTiles.length < 2) {
+        if (!this.endOfRound) {
           this.freeze = false;
           return;
         } else {
+          this.$emit("endOfRound");
           setTimeout(() => {
             if (this.roundIsWon) {
               this.foundPairs = [...this.foundPairs, ...this.chosenTiles];
             }
             this.chosenTiles = [];
-            this.$emit("endOfRound");
             this.freeze = false;
           }, 500);
         }
