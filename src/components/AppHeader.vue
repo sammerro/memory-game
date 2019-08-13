@@ -1,6 +1,6 @@
 <template>
   <header>
-    <h1>Memory Game</h1>
+    <h1 class="main-title">Memory Game</h1>
   </header>
 </template>
 
@@ -9,4 +9,6 @@ export default {};
 </script>
 
 <style scoped>
+.main-title {
+}
 </style>

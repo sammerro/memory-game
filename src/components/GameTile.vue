@@ -52,7 +52,7 @@ export default {
 .tile {
   width: 70px;
   height: 70px;
-  // clip-path: circle(0%);
+  clip-path: circle(0%);
   // clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
   opacity: 0;
   transition: all 0.3s ease-in-out;
@@ -61,7 +61,7 @@ export default {
 .tile-revealed {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   opacity: 0.8;
-  // clip-path: circle(100%);
+  clip-path: circle(100%);
   // clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 </style>
