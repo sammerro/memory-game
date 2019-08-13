@@ -79,9 +79,9 @@ export default {
             }
             this.chosenTiles = [];
             this.freeze = false;
-          }, 500);
+          }, 150);
         }
-      }, 500);
+      }, 300);
     }
   }
 };
@@ -92,6 +92,6 @@ export default {
   display: grid;
   grid-template-columns: 70px 70px 70px 70px;
   grid-template-rows: 70px 70px 70px 70px;
-  grid-gap: 4px;
+  grid-gap: 1em;
 }
 </style>
