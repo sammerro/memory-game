@@ -55,6 +55,7 @@ export default {
       this.getImages();
       this.shuffle();
       this.startTimer();
+      this.round = 0;
     },
     startTimer() {
       const start = new Date();
