@@ -1,23 +1,38 @@
 <template>
-  <div class="game-container">
-    <app-header class="app-header"></app-header>
-    <div class="stats">
-      <p>Time: {{seconds}} sec.</p>
-      <p>Round number: {{round}}</p>
+  <div class="in-two-container">
+    <div class="records">
+      <h2>RECORD book :)</h2>
+      <span v-if="loading">Loading Data...</span>
+      <ol v-else>
+        <li v-for="(record, index) in recordsSrorted" :key="index">
+          <p class="name">{{record.nick}}:</p>
+          <p>{{record.rounds}} rounds.</p>
+          <p>{{record.time}} seconds.</p>
+        </li>
+      </ol>
     </div>
-    <main class="game-container__main">
-      <game-grid
-        v-if="renderComponent"
-        @win="handleWin()"
-        @endOfRound="handleEndOfRound()"
-        :imageUrls="mixedDuplicatedImages"
-        :key="numberOfGames"
-      ></game-grid>
-    </main>
+    <div class="game-container">
+      <app-header class="app-header"></app-header>
+      <div class="stats">
+        <p>Time: {{seconds}} sec.</p>
+        <p>Round number: {{round}}</p>
+      </div>
+      <div class="in-two-container"></div>
+      <main class="game-container__main">
+        <game-grid
+          v-if="renderComponent"
+          @win="handleWin()"
+          @endOfRound="handleEndOfRound()"
+          :imageUrls="mixedDuplicatedImages"
+          :key="numberOfGames"
+        ></game-grid>
+      </main>
+    </div>
   </div>
 </template>
 
 <script>
+import { db } from "@/main";
 import AppHeader from "@/components/AppHeader.vue";
 import GameGrid from "@/components/GameGrid.vue";
 
@@ -37,6 +52,8 @@ export default {
   },
   data() {
     return {
+      errors: undefined,
+      loading: false,
       images: [],
       mixedDuplicatedImages: [],
       round: 0,
@@ -44,13 +61,34 @@ export default {
       seconds: 0,
       intervalId: undefined,
       numberOfGames: 0,
-      renderComponent: true
+      renderComponent: true,
+      recordsCollection: []
     };
   },
   mounted() {
+    this.getDbData();
     this.start();
   },
+  computed: {
+    recordsSrorted() {
+      return this.recordsCollection.sort(
+        (a, b) => (a.rounds - b.rounds) * 10000 + (a.time - b.time)
+      );
+    }
+  },
   methods: {
+    getDbData() {
+      this.loading = true;
+      db.collection("records")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.recordsCollection.push(doc.data());
+          });
+          this.loading = false;
+        });
+      console.log(db);
+    },
     start() {
       this.getImages();
       this.shuffle();
@@ -72,13 +110,30 @@ export default {
     },
     handleEndOfRound() {
       this.round++;
+      // this.handleWin();
     },
     handleWin() {
       this.stopTimer();
       alert(
         `YOU WON!!!, your time: ${this.seconds} seconds. Number of round: ${this.round}`
       );
+      let name = prompt(
+        "SIGN your name, so the world remembers your achievement!",
+        name
+      );
       this.forceRerender();
+      db.collection("records")
+        .add({
+          nick: name,
+          rounds: this.round,
+          time: this.seconds
+        })
+        .then(res => {
+          if (res) {
+            console.log(res);
+          }
+          this.getDbData();
+        });
       this.start();
     },
     shuffle() {
@@ -104,8 +159,36 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.in-two-container {
+  display: flex;
+  color: #efefef;
+  background-color: #544f5a;
+}
+.name {
+  margin-right: auto;
+  font-size: 1.25rem;
+  color: rgb(245, 245, 245);
+}
+.records {
+  flex: 0 0 30%;
+  font-size: 0.875rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+.records ul {
+  list-style-type: decimal;
+}
+.records li {
+  border-top: 1px solid whitesmoke;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  list-style-type: decimal;
+  margin: auto;
+}
 .game-container {
+  flex: 1 0 30%;
   min-height: 100vh;
   display: flex;
   flex-flow: column nowrap;
