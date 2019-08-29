@@ -122,18 +122,20 @@ export default {
         name
       );
       this.forceRerender();
-      db.collection("records")
-        .add({
-          nick: name,
-          rounds: this.round,
-          time: this.seconds
-        })
-        .then(res => {
-          if (res) {
-            console.log(res);
-          }
-          this.getDbData();
-        });
+      if (name) {
+        db.collection("records")
+          .add({
+            nick: name,
+            rounds: this.round,
+            time: this.seconds
+          })
+          .then(res => {
+            if (res) {
+              console.log(res);
+            }
+            this.getDbData();
+          });
+      }
       this.start();
     },
     shuffle() {
