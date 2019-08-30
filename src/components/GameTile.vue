@@ -56,7 +56,7 @@ export default {
     width: $tile-size-small;
     height: $tile-size-small;
   }
-  // clip-path: circle(0%);
+  clip-path: circle(0%);
   // clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
   opacity: 0;
   transition: all 0.3s ease-in-out;
