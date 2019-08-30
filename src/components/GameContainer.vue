@@ -4,11 +4,17 @@
       <h2>RECORD book :)</h2>
       <span v-if="loading">Loading Data...</span>
       <ol v-else>
-        <li v-for="(record, index) in recordsSrorted" :key="index">
+        <li
+          v-for="(record, index) in recordsSrorted"
+          :key="index"
+          :style="{color: placeColor(index + 1)}"
+        >
           <span>{{index + 1}}.</span>
-          <p class="name">{{record.nick}}</p>
-          <p class="rounds">{{record.rounds}} rounds.</p>
-          <p class="time">{{record.time}} seconds.</p>
+          <p class="name" :style="{color: placeColor(index + 1)}">{{record.nick}}</p>
+          <p class="rounds" :style="{color: placeColor(index + 1)}">
+            <span class="bigger" :style="{color: placeColor(index + 1)}">{{record.rounds}}</span> rounds.
+          </p>
+          <p class="time" :style="{color: placeColor(index + 1)}">{{record.time}} s.</p>
         </li>
       </ol>
     </div>
@@ -78,6 +84,11 @@ export default {
     }
   },
   methods: {
+    placeColor(place) {
+      if (place === 1) return "gold";
+      if (place === 2) return "silver";
+      if (place === 3) return "#cd7f32";
+    },
     getDbData() {
       this.loading = true;
       this.recordsCollection = [];
@@ -167,10 +178,16 @@ export default {
 .in-two-container {
   display: flex;
   color: #efefef;
-  background-color: #544f5a;
+  background-color: #353238;
+  @media (max-width: 750px) {
+    flex-direction: column-reverse;
+  }
 }
 .records {
-  flex: 0 0 30%;
+  flex: 0 0 25rem;
+  @media (max-width: 750px) {
+    flex: 0 0 100%;
+  }
   font-size: 0.875rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -178,31 +195,46 @@ export default {
   height: 100vh;
   span {
     font-weight: 700;
-    margin-right: 2rem;
+    margin-right: 1rem;
   }
   ol {
-    width: 80%;
+    width: 90%;
+    list-style: none;
+    padding-left: 0;
     margin: 1rem auto auto;
+    list-style-type: decimal;
     li {
       border-bottom: 1px solid whitesmoke;
       display: flex;
-      align-content: center;
+      align-content: flex-end;
       align-items: center;
       list-style-type: decimal;
       margin: auto;
+
       .name {
+        text-align: left;
         margin-right: auto;
         font-size: 1.25rem;
         color: rgb(245, 245, 245);
       }
       .rounds {
+        flex: 0 0 4rem;
+        text-align: right;
+        color: #bebebe;
+        margin: 0.25rem;
+        .bigger {
+          color: white;
+          font-size: 1.125rem;
+        }
+      }
+      .time {
+        flex: 0 0 4rem;
+        margin: 0.25rem;
+        text-align: right;
         color: #bebebe;
       }
     }
   }
-}
-.records ul {
-  list-style-type: decimal;
 }
 .game-container {
   flex: 1 0 30%;
@@ -239,5 +271,8 @@ export default {
 .stats {
   color: rgb(196, 184, 168);
   text-align: center;
+}
+.gold {
+  background-color: gold;
 }
 </style>

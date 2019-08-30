@@ -90,8 +90,13 @@ export default {
 <style lang="scss" scoped>
 .game-grid {
   display: grid;
-  grid-template-columns: 70px 70px 70px 70px;
-  grid-template-rows: 70px 70px 70px 70px;
+  grid-template-columns: $tile-size $tile-size $tile-size $tile-size;
+  grid-template-rows: $tile-size $tile-size $tile-size $tile-size;
   grid-gap: 1em;
+  @media (max-width: 370px) {
+    flex-direction: column-reverse;
+    grid-template-columns: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
+    grid-template-rows: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
+  }
 }
 </style>

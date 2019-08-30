@@ -50,8 +50,12 @@ export default {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 .tile {
-  width: 70px;
-  height: 70px;
+  width: $tile-size;
+  height: $tile-size;
+  @media (max-width: 370px) {
+    width: $tile-size-small;
+    height: $tile-size-small;
+  }
   // clip-path: circle(0%);
   // clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
   opacity: 0;
