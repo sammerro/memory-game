@@ -94,7 +94,6 @@ export default {
   grid-template-rows: $tile-size $tile-size $tile-size $tile-size;
   grid-gap: 1em;
   @media (max-width: 370px) {
-    flex-direction: column-reverse;
     grid-template-columns: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
     grid-template-rows: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
   }
