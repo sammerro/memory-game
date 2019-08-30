@@ -5,9 +5,10 @@
       <span v-if="loading">Loading Data...</span>
       <ol v-else>
         <li v-for="(record, index) in recordsSrorted" :key="index">
-          <p class="name">{{record.nick}}:</p>
-          <p>{{record.rounds}} rounds.</p>
-          <p>{{record.time}} seconds.</p>
+          <span>{{index + 1}}.</span>
+          <p class="name">{{record.nick}}</p>
+          <p class="rounds">{{record.rounds}} rounds.</p>
+          <p class="time">{{record.time}} seconds.</p>
         </li>
       </ol>
     </div>
@@ -79,6 +80,7 @@ export default {
   methods: {
     getDbData() {
       this.loading = true;
+      this.recordsCollection = [];
       db.collection("records")
         .get()
         .then(snapshot => {
@@ -167,27 +169,40 @@ export default {
   color: #efefef;
   background-color: #544f5a;
 }
-.name {
-  margin-right: auto;
-  font-size: 1.25rem;
-  color: rgb(245, 245, 245);
-}
 .records {
   flex: 0 0 30%;
   font-size: 0.875rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  overflow: auto;
+  height: 100vh;
+  span {
+    font-weight: 700;
+    margin-right: 2rem;
+  }
+  ol {
+    width: 80%;
+    margin: 1rem auto auto;
+    li {
+      border-bottom: 1px solid whitesmoke;
+      display: flex;
+      align-content: center;
+      align-items: center;
+      list-style-type: decimal;
+      margin: auto;
+      .name {
+        margin-right: auto;
+        font-size: 1.25rem;
+        color: rgb(245, 245, 245);
+      }
+      .rounds {
+        color: #bebebe;
+      }
+    }
+  }
 }
 .records ul {
   list-style-type: decimal;
-}
-.records li {
-  border-top: 1px solid whitesmoke;
-  display: flex;
-  align-content: center;
-  align-items: center;
-  list-style-type: decimal;
-  margin: auto;
 }
 .game-container {
   flex: 1 0 30%;
