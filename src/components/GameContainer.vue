@@ -9,7 +9,7 @@
           :key="index"
           :style="{color: placeColor(index + 1)}"
         >
-          <span>{{index + 1}}.</span>
+          <p class="number">{{index + 1}}.</p>
           <p class="name" :style="{color: placeColor(index + 1)}">{{record.nick}}</p>
           <p class="rounds" :style="{color: placeColor(index + 1)}">
             <span class="bigger" :style="{color: placeColor(index + 1)}">{{record.rounds}}</span> rounds.
@@ -204,12 +204,16 @@ export default {
     margin: 1rem auto auto;
     list-style-type: decimal;
     li {
-      border-bottom: 1px solid whitesmoke;
+      border-bottom: 1px dashed #6b6570;
       display: flex;
-      align-content: flex-end;
+      align-content: center;
       align-items: center;
       list-style-type: decimal;
       margin: auto;
+      .number {
+        font-weight: 700;
+        margin: 0 1rem 0 0;
+      }
 
       .name {
         text-align: left;
