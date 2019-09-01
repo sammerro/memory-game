@@ -1,5 +1,6 @@
 <template>
   <section class="game-grid">
+    <slot></slot>
     <game-tile
       :style="{cursor: gameIsWon ? 'auto' : 'pointer', visibility: foundPairs.includes(index)? 'hidden' : 'visible'}"
       @click.native="choose(index)"
@@ -90,12 +91,33 @@ export default {
 <style lang="scss" scoped>
 .game-grid {
   display: grid;
+  position: relative;
   grid-template-columns: $tile-size $tile-size $tile-size $tile-size;
   grid-template-rows: $tile-size $tile-size $tile-size $tile-size;
   grid-gap: 1em;
   @media (max-width: 370px) {
     grid-template-columns: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
     grid-template-rows: $tile-size-small $tile-size-small $tile-size-small $tile-size-small;
+  }
+  .restart-button {
+    position: absolute;
+    top: -3.5rem;
+    right: 0;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    background-color: #353238;
+    color: #817575;
+    border: none;
+    border-radius: 0.2rem;
+    transition: all 0.1s ease;
+    opacity: 0.6;
+    &:hover {
+      opacity: 1;
+      transition: none;
+    }
+    &:active {
+      transform: translateY(1px);
+    }
   }
 }
 </style>

@@ -2,12 +2,13 @@
   <div class="in-two-container">
     <div class="records">
       <h2>RECORD book :)</h2>
+
       <span v-if="loading">Loading Data...</span>
       <ol v-else>
         <li
-          v-for="(record, index) in recordsSrorted"
+          v-for="(record, index) in showMore? recordsSrorted : recordsSrorted.slice(0,3)"
           :key="index"
-          :style="{color: placeColor(index + 1)}"
+          :style="{color: placeColor(index + 1), marginBottom: index === 2 ? '2rem': 'auto', position: 'relative'}"
         >
           <p class="number">{{index + 1}}.</p>
           <p class="name" :style="{color: placeColor(index + 1)}">{{record.nick}}</p>
@@ -15,6 +16,11 @@
             <span class="bigger" :style="{color: placeColor(index + 1)}">{{record.rounds}}</span> rounds.
           </p>
           <p class="time" :style="{color: placeColor(index + 1)}">{{record.time}} s.</p>
+          <a
+            v-if="index===2"
+            style="color: gray; font-size: 1rem; cursor: pointer; position: absolute; bottom: -2rem; left: 50%; transform: translateX(-50%)"
+            @click="showMore = !showMore"
+          >{{showMore? 'Show less...' : "Show More..."}}</a>
         </li>
       </ol>
     </div>
@@ -24,7 +30,6 @@
         <p>Time: {{seconds}} sec.</p>
         <p>Round number: {{round}}</p>
       </div>
-      <div class="in-two-container"></div>
       <main class="game-container__main">
         <game-grid
           v-if="renderComponent"
@@ -32,7 +37,11 @@
           @endOfRound="handleEndOfRound()"
           :imageUrls="mixedDuplicatedImages"
           :key="numberOfGames"
-        ></game-grid>
+        >
+          <button class="restart-button" @click="restart()">
+            <font-awesome-icon :icon="seconds===0 ? 'play' : 'redo'"></font-awesome-icon>
+          </button>
+        </game-grid>
       </main>
     </div>
   </div>
@@ -69,7 +78,8 @@ export default {
       intervalId: undefined,
       numberOfGames: 0,
       renderComponent: true,
-      recordsCollection: []
+      recordsCollection: [],
+      showMore: false
     };
   },
   mounted() {
@@ -102,11 +112,16 @@ export default {
         });
       console.log(db);
     },
+    restart() {
+      this.stopTimer();
+      this.forceRerender();
+      this.start();
+    },
     start() {
       this.getImages();
       this.shuffle();
-      this.startTimer();
       this.round = 0;
+      this.startTimer();
     },
     startTimer() {
       const start = new Date();
@@ -134,7 +149,6 @@ export default {
         "SIGN your name, so the world remembers your achievement!",
         name
       );
-      this.forceRerender();
       if (name) {
         db.collection("records")
           .add({
@@ -149,6 +163,7 @@ export default {
             this.getDbData();
           });
       }
+      this.forceRerender();
       this.start();
     },
     shuffle() {
@@ -184,6 +199,7 @@ export default {
   }
 }
 .records {
+  padding: 1rem 0;
   flex: 0 0 25rem;
   @media (max-width: 750px) {
     flex: 0 0 100%;
@@ -214,7 +230,6 @@ export default {
         font-weight: 700;
         margin: 0 1rem 0 0;
       }
-
       .name {
         text-align: left;
         margin-right: auto;
@@ -241,12 +256,14 @@ export default {
   }
 }
 .game-container {
+  position: relative;
   flex: 1 0 30%;
   min-height: 100vh;
   display: flex;
   flex-flow: column nowrap;
   justify-items: center;
   align-content: center;
+  align-items: center;
   background: #0f0c29; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to right,
@@ -269,7 +286,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgb(163, 122, 122); */
   flex: 1 0 auto;
 }
 .stats {
