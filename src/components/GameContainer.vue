@@ -13,7 +13,7 @@
           <p class="number">{{index + 1}}.</p>
           <p class="name" :style="{color: placeColor(index + 1)}">{{record.nick}}</p>
           <p class="rounds" :style="{color: placeColor(index + 1)}">
-            <span class="bigger" :style="{color: placeColor(index + 1)}">{{record.rounds}}</span> rounds.
+            <span class="bigger" :style="{color: placeColor(index + 1)}">{{record.rounds}}</span> rounds
           </p>
           <p class="time" :style="{color: placeColor(index + 1)}">{{record.time}} s.</p>
           <a
