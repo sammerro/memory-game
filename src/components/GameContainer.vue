@@ -1,7 +1,7 @@
 <template>
   <div class="in-two-container">
     <div class="records">
-      <h2>RECORD book :)</h2>
+      <h2>RECORDS Book :)</h2>
 
       <span v-if="loading">Loading Data...</span>
       <ol v-else>
