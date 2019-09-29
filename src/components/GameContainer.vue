@@ -44,12 +44,33 @@
         </game-grid>
       </main>
     </div>
+    <app-modal @close="modal = false" v-if="modal">
+      <template #header>
+        <h3 class="modal__header">You won!</h3>
+      </template>
+      <template #body>
+        <p>Rounds: {{round}}</p>
+        <p>Time: {{seconds}} seconds</p>
+        <div class="input__container">
+          <label for="name">Your&nbsp;name:</label>
+          <input v-model="name" type="text" id="name" />
+        </div>
+      </template>
+      <template #footer>
+        <p>Do you want to save your results?</p>
+        <div class="btn__container">
+          <button class="btn btn--yes" @click="modalYes()">Yes</button>
+          <button class="btn btn--no" @click="modalNo()">No</button>
+        </div>
+      </template>
+    </app-modal>
   </div>
 </template>
 
 <script>
 import { db } from "@/main";
 import AppHeader from "@/components/AppHeader.vue";
+import AppModal from "@/components/AppModal.vue";
 import GameGrid from "@/components/GameGrid.vue";
 
 import { _shuffleArray } from "@/helpers/helpers";
@@ -63,11 +84,13 @@ export default {
     } */
   },
   components: {
+    AppModal,
     AppHeader,
     GameGrid
   },
   data() {
     return {
+      modal: false,
       errors: undefined,
       loading: false,
       images: [],
@@ -79,7 +102,8 @@ export default {
       numberOfGames: 0,
       renderComponent: true,
       recordsCollection: [],
-      showMore: false
+      showMore: false,
+      name: ""
     };
   },
   mounted() {
@@ -140,19 +164,11 @@ export default {
       this.round++;
       // this.handleWin();
     },
-    handleWin() {
-      this.stopTimer();
-      alert(
-        `YOU WON!!!, your time: ${this.seconds} seconds. Number of round: ${this.round}`
-      );
-      let name = prompt(
-        "SIGN your name, so the world remembers your achievement!",
-        name
-      );
-      if (name) {
+    saveCurrentResults() {
+      if (this.name) {
         db.collection("records")
           .add({
-            nick: name,
+            nick: this.name,
             rounds: this.round,
             time: this.seconds
           })
@@ -163,8 +179,21 @@ export default {
             this.getDbData();
           });
       }
+    },
+    modalYes() {
+      this.saveCurrentResults();
+      this.modal = false;
       this.forceRerender();
       this.start();
+    },
+    modalNo() {
+      this.modal = false;
+      this.forceRerender();
+      this.start();
+    },
+    handleWin() {
+      this.stopTimer();
+      this.modal = true;
     },
     shuffle() {
       this.mixedDuplicatedImages = _shuffleArray([
@@ -190,10 +219,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$text-dark: rgb(48, 48, 48);
 .in-two-container {
   display: flex;
-  color: #efefef;
   background-color: #353238;
+  color: $text-dark;
   @media (max-width: 750px) {
     flex-direction: column-reverse;
   }
@@ -255,6 +285,20 @@ export default {
     }
   }
 }
+.input__container {
+  display: flex;
+  flex-direction: column;
+  & > * {
+    display: block;
+  }
+  label {
+    margin-bottom: 0.375rem;
+  }
+  input {
+    padding: 0.25rem 0.25rem;
+    background-color: #ffffff;
+  }
+}
 .game-container {
   position: relative;
   flex: 1 0 30%;
@@ -294,5 +338,36 @@ export default {
 }
 .gold {
   background-color: gold;
+}
+.modal {
+  &__header {
+    color: text;
+  }
+}
+.btn {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  cursor: pointer;
+  background: #efefef;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+  &__container {
+    display: flex;
+    justify-content: space-around;
+  }
+  &--yes {
+    background-color: #694e85;
+    color: rgb(245, 245, 245);
+  }
+  &--no {
+    background-color: #848385;
+    color: rgb(245, 245, 245);
+  }
 }
 </style>

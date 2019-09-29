@@ -18,6 +18,8 @@ export default {
 <style lang="scss" >
 /* @import url("https://fonts.googleapis.com/css?family=Beth+Ellen|Libre+Baskerville&display=swap"); */
 @import "src/assets/css/normalize.scss";
+
+$text-dark: rgb(54, 54, 54);
 * {
   box-sizing: border-box;
 }
@@ -27,6 +29,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #10171d;
 }
 </style>
