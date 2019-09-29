@@ -1,7 +1,7 @@
 <template>
   <div class="in-two-container">
     <div class="records">
-      <h2>RECORDS Book :)</h2>
+      <h2>Records Book</h2>
 
       <span v-if="loading">Loading Data...</span>
       <ol v-else>
@@ -229,6 +229,7 @@ $text-dark: rgb(48, 48, 48);
   }
 }
 .records {
+  color: rgb(245, 245, 245);
   padding: 1rem 0;
   flex: 0 0 25rem;
   @media (max-width: 750px) {
